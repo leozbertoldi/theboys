@@ -5,7 +5,7 @@ struct local
 {
   int x;
   int y;
-}
+};
 
 struct heroi
 {
@@ -15,7 +15,7 @@ struct heroi
   int velocidade;
   int experiencia;
   struct base;
-}
+};
 
 struct base
 {
@@ -24,7 +24,7 @@ struct base
   struct cjnt_t *presentes;
   struct fprio_t *espera;
   struct local;  
-}
+};
 
 struct missao
 {
@@ -32,7 +32,7 @@ struct missao
   struct cjnt_t *habilidades;
   int perigo;
   struct local;
-}
+};
 
 struct mundo
 {
@@ -45,6 +45,6 @@ struct mundo
   int nhabilidades;
   int tamanho;
   int relogio;
-}
+};
 
 #endif
