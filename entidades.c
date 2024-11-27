@@ -11,7 +11,7 @@ struct mundo *inicializa_mundo(struct mundo *m)
  
   for (i = 0; i < m->nherois; i++)
   { 
-    h = malloc(sizeof(h));
+    h = malloc(sizeof(struct heroi));
     
     if (!h)
       return NULL;
