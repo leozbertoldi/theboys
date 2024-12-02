@@ -14,7 +14,7 @@ struct heroi
   int paciencia;
   int velocidade;
   int experiencia;
-  struct base;
+  struct base *base_heroi;
 };
 
 struct base
@@ -22,8 +22,8 @@ struct base
   int ID;
   int lotacao;
   struct cjnt_t *presentes;
-  struct fprio_t *espera;
-  struct local;  
+  struct lista_t *espera;
+  struct local *local;  
 };
 
 struct missao
@@ -31,7 +31,7 @@ struct missao
   int ID;
   struct cjnt_t *habilidades;
   int perigo;
-  struct local;
+  struct local *local;
 };
 
 struct mundo
