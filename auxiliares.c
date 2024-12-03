@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 
@@ -29,6 +31,8 @@ int heap_sort(int v[], int tam)
 
 int build_max_heapify(int v[], int tam)
 {
+  int n;
+
   n = tam;
   for (i = floor(n/2); i > 0; i--)
     heapify(v, i, n);
@@ -62,9 +66,9 @@ void heapify(int v[], int i, int n)
 
 void troca(int *a, int *b)
 {
-    int aux = a;
-    a = b;
-    b = aux;
+    int aux = *a;
+    *a = *b;
+    *b = aux;
 
     return;
 }

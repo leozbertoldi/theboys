@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "eventos.h"
+#include "entidades.h"
 
 //evento CHEGA
 void chega(int t, struct heroi h, struct base b)
@@ -153,19 +154,41 @@ void morre(int t, struct heroi h, struct base b)
 //evento MISSÃO
 void missao(int t, struct missao m, struct mundo w)
 {
-  int i, tamanho;
-  int distancias[w.Nbases];
+  int i, tamanho, distancia, menor, risco;
+  struct base BMP;
+  menor = w.tamanho;
 
   for (i = 0; i < w.Nbases; i++)
   {
     //a trabalhar: conferir se a base tem as habilidades certas
     if cjto_inter
-      distancias[i] = distancia_cartesiana(m.local, w.bases[i]);
-      tamanho++;
+    {
+      distancia = distancia_cartesiana(m.local, w.bases[i]);
+      if (distancia < menor)
+        menor = distancia;
+        BMP = w.bases[i];
+    }    
   }
-  
-  heap_sort(distancias, tamanho);
-    
+
+  if (BMP)
+  {
+    m.cumprida = true;
+    for (i = 0; i < N_HEROIS; i++)
+    {
+      if (cjto_pertence(BMP.presentes, i) == 1)
+      {
+        risco = m.perigo/(w.herois[i]->paciencia + w.herois[i]->experiencia + 1.0);
+        if (risco > rand() % 30)
+          proximo da lef = morre(agora, w.herois[i]);
+        else 
+          w.herois[i]->experiencia++;
+      }
+    }
+  }
+  else 
+   proximo da lef = missao(t + 24*60, m);
+
+  return;
 }
 
 //--------------------------------------- 

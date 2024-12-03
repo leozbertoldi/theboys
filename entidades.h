@@ -1,6 +1,14 @@
 #ifndef ENTIDADES
 #define ENTIDADES
 
+#define T_INICIO 0
+#define T_FIM_DO_MUNDO 525600
+#define N_TAMANHO_MUNDO 20000
+#define N_HABILIDADES 10
+#define N_HEROIS (N_HABILIDADES*5)
+#define N_BASES  (N_HEROIS/5)
+#define N_MISSOES  (T_FIM_DO_MUNDO/100)
+
 struct local
 {
   int x;
@@ -33,6 +41,7 @@ struct missao
   struct cjnt_t *habilidades;
   int perigo;
   struct local *local;
+  bool cumprida;
 };
 
 struct mundo
@@ -47,5 +56,12 @@ struct mundo
   int tamanho;
   int relogio;
 };
+
+struct mundo *inicializa_mundo(struct mundo *m);
+
+struct heroi *inicializa_heroi(struct heroi *h, int i);
+
+struct base *inicializa_base(struct base *b, int i);  
+
 
 #endif

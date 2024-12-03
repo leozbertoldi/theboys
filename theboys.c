@@ -12,11 +12,6 @@
 #include "eventos.h"
 #include "auxiliares.h"
 
-#define T_INICIO 0
-#define T_FIM_DO_MUNDO 525600
-#define N_TAMANHO_MUNDO 20000
-#define N_HABILIDADES 10
-
 // programa principal
 int main ()
 {
