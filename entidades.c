@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "entidades.h"
+#include "auxiliares.h"
 
 struct mundo *inicializa_mundo(struct mundo *w)  
 {
@@ -23,10 +24,11 @@ struct mundo *inicializa_mundo(struct mundo *w)
   for (i = 0; i < N_MISSOES; i++)
     w.missoes[i] = inicializa_missao(m, i);
 
-  w.tamanho->x = N_TAMANHO_MUNDO;
-  w.tamanho->y = N_TAMANHO_MUNDO;
+  w->tamanho.x = N_TAMANHO_MUNDO;
+  w->tamanho.y = N_TAMANHO_MUNDO;
 
-  w.relogio = 0;
+  w->relogio = 0;
+  w->lef = fprio_cria();
 
   return w;
 }
@@ -37,8 +39,8 @@ struct heroi *inicializa_heroi(struct heroi *h, int i)
 
   h.ID = i;
   h.experiencia = 0;
-  h.paciencia = rand() % 101; //aleat entre 0 e 100
-  h.velocidade = rand() % 4951 + 50;  //aleat entre 50 e 5000
+  h.paciencia = aleat(0,100); 
+  h.velocidade = aleat(50,5000);  
   h.habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
   h.base_heroi = NULL;
   h.vivo = true;
@@ -49,9 +51,9 @@ struct heroi *inicializa_heroi(struct heroi *h, int i)
 struct base *inicializa_base(struct base *b, int i)
 {
   b.ID = i;
-  b.local->x = rand() % N_TAMANHO_MUNDO;
-  b.local->y = rand() % N_TAMANHO_MUNDO;
-  b.lotacao = rand() % 8 + 3; //aleat entre 3 e 10
+  b.local.x = aleat(0,N_TAMANHO_MUNDO-1);
+  b.local.y = aleat(0,N_TAMANHO_MUNDO-1);
+  b.lotacao = aleat(3,10); 
   b.presentes = cjto_cria(b.lotacao);
   b.espera = lista_cria();
 
@@ -63,10 +65,10 @@ struct missao *inicializa_missao(struct missao *m, int i)
   int j, habilidade, tamanho;
 
   m.ID = i;
-  m.local->x = rand() % N_TAMANHO_MUNDO;
-  m.local->y = rand() % N_TAMANHO_MUNDO;
+  m.local.x = aleat(0,N_TAMANHO_MUNDO-1);
+  m.local.y = aleat(0,N_TAMANHO_MUNDO-1);
   m.habilidades = cjto_aleat(aleat(6,10),N_HABILIDADES);
-  m.perigo = rand() % 101;
+  m.perigo = aleat(0,100);
   m.cumprida = false;
   m.tentativas = 0;
 

@@ -4,6 +4,7 @@
 #include <math.h>
 #include "eventos.h"
 #include "entidades.h"
+#include "auxiliares.h"
 
 //EVENTOS INICIAIS
 //=======================================================================================
@@ -14,8 +15,8 @@ void base_aleatoria(struct mundo *w)
 
   for (i = 0; i < N_HEROIS; i++)
   {
-    base = rand() % N_BASES;
-    tempo = rand() % 4321;
+    base = aleat(0,N_BASES-1);
+    tempo = aleat(0,4320);
     proximo lef = chega(tempo, w->herois[i], w->bases[base]);
   }
 //dica maziero para insrir evento
@@ -39,7 +40,7 @@ void agenda_missao(struct mundo *w)
 
   for (i = 0; i < N_MISSOES; i++)
   {
-    tempo = rand() % T_FIM_DO_MUNDO;
+    tempo = aleat(0,T_FIM_DO_MUNDO-1);
     proximo lef = missao(tempo, w.missoes[i]);
   }
 
@@ -50,7 +51,7 @@ void agenda_missao(struct mundo *w)
 
 
 //evento CHEGA
-void chega(int t, struct heroi *h, struct base *b)
+void chega(struct mundo *w, struct evento_t *ev)
 {
   bool espera;
 
@@ -78,7 +79,7 @@ void chega(int t, struct heroi *h, struct base *b)
 //----------------------------------------
 
 //evento ESPERA
-void espera(int t, struct heroi *h, struct base*b)
+void espera(struct mundo *w, struct evento_t *ev)
 {
   
   lista_insere(b.espera, h, -1);
@@ -93,11 +94,11 @@ void espera(int t, struct heroi *h, struct base*b)
 //----------------------------------------
 
 //evento DESISTE
-void desiste(int t, struct heroi *h, struct base *b)
+void desiste(struct mundo *w, struct evento_t *ev)
 {
   int D;
 
-  D = rand() % 10;
+  D = aleat(0,N_BASES-1);
 
   proximo da lef = evento viaja(agora, h, D);
 
@@ -109,7 +110,7 @@ void desiste(int t, struct heroi *h, struct base *b)
 //----------------------------------------
 
 //evento AVISA
-void avisa(int t, struct base *b)
+void avisa(struct mundo *w, struct evento_t *ev)
 {
   struct heroi aux;
 
@@ -129,11 +130,11 @@ void avisa(int t, struct base *b)
 //----------------------------------------
 
 //evento ENTRA
-void entra(int t, struct heroi *h, struct base *b)
+void entra(struct mundo *w, struct evento_t *ev)
 {
   int TPB;
 
-  TPB = 15 + h.paciencia * (rand() % 20);
+  TPB = 15 + h.paciencia * aleat(0,20);
 
   proximo da lef = evento sai(agora + TPB, h, b);
 
@@ -145,13 +146,13 @@ void entra(int t, struct heroi *h, struct base *b)
 //----------------------------------------
 
 //evento SAI
-void sai(int t, struct heroi *h, struct base *b)
+void sai(struct mundo *w, struct evento_t *ev)
 {
   int D;
   
   lista_retira(b.presentes, h, lista_consulta(h));
 
-  D = rand() % 10;
+  D = aleat(0,N_BASES-1);
 
   proximo da lef = viaja(agora, h, D);
   proximo da lef = avisa(agora, b);
@@ -164,7 +165,7 @@ void sai(int t, struct heroi *h, struct base *b)
 //----------------------------------------
 
 //evento VIAJA
-void viaja(int t, struct heroi *h, struct base *d)
+void viaja(struct mundo *w, struct evento_t *ev)
 {
   float distancia;
 
@@ -181,7 +182,7 @@ void viaja(int t, struct heroi *h, struct base *d)
 //----------------------------------------
 
 //evento MORRE
-void morre(int t, struct heroi *h, struct base *b)
+void morre(struct mundo *w, struct evento_t *ev)
 {
   cjto_retira(h, h.ID);
   h.vivo = false;
@@ -196,7 +197,7 @@ void morre(int t, struct heroi *h, struct base *b)
 //----------------------------------------
 
 //evento MISSÃO
-void missao(int t, struct missao *m, struct mundo *w)
+void missao(struct mundo *w, struct evento_t *ev)
 {
   int i, tamanho, distancia, menor, risco;
   struct base BMP;
@@ -243,8 +244,17 @@ void missao(int t, struct missao *m, struct mundo *w)
 //----------------------------------------
 
 //evento FIM
-void fim(int t) //só prints
+void fim(struct mundo *w, struct evento_t *ev) 
 {
+  printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ", );
+  printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ", );
+  cjto_imprime(habilidades dos herois);
+  printf("\n");
+  printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", base, lotacao, maximodeheroisnaespera, missoes);
+  printf("EVENTOS TRATADOS: %d\n", eventos);
+  printf("MISSOES CUMRPIDAS: %d/%d (%.1f%%)\n", cumpridas, geradas, porcentagem);
+  printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min_tentativas, max_tentativas, media);
+  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/ //div 1.0
 }
 
 

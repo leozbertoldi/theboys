@@ -16,9 +16,11 @@
 int main ()
 {
   struct mundo *w;
+  struct evento_t *ev;
+
   w = malloc(sizeof(struct mundo));
   w = inicializa_mundo(w);
-  lef = fprio_cria();
+ 
   base_aleatoria(w);
   agenda_missao(w);
   lef = evento fim(T_FIM_DO_MUNDO);
@@ -32,18 +34,35 @@ int main ()
     
     switch(ev->tipo)
     {
-      case EV_CHEGA chega(*w, *ev);
+      case EV_CHEGA: chega(w, ev);
       break;
 
-      case EV_ESPERA
-      case EV_DECIDE
-      case EV_AVISA
-      case EV_ENTRA
-      case EV_SAI
-      case EV_VIAJA
-      case EV_MORRE
-      case EV_CHEGA 
-      case EV_CHEGA 
+      case EV_ESPERA: espera(w, ev);
+      break;
+
+      case EV_DESISTE: desiste(w, ev);
+      break;
+
+      case EV_AVISA: avisa(w, ev);
+      break;
+
+      case EV_ENTRA: entra(w, ev);
+      break;
+
+      case EV_SAI: sai(w, ev);
+      break;
+
+      case EV_VIAJA: viaja(w, ev);
+      break;
+
+      case EV_MORRE: morre(w, ev);
+      break;
+
+      case EV_MISSAO: missao(w, ev);
+      break;
+
+      case EV_FIM: fim(w, ev);
+      break;
 
       free(ev);
     }

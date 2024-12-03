@@ -11,7 +11,7 @@
 
 #define EV_CHEGA 1
 #define EV_ESPERA 2
-#define EV_DECIDE 3
+#define EV_DESISTE 3
 #define EV_AVISA 4
 #define EV_ENTRA 5
 #define EV_SAI 6

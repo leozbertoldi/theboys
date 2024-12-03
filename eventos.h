@@ -2,33 +2,33 @@
 #define EVENTOS
 
 //evento CHEGA
-void chega(int t, struct heroi h, struct base b);
+void chega(struct mundo *w, struct evento_t *ev);
 
 //evento ESPERA
-void espera(int t, struct heroi h, struct base b);
+void espera(struct mundo *w, struct evento_t *ev);
 
 //evento DESISTE
-void desiste(int t, struct heroi h, struct base b);
+void desiste(struct mundo *w, struct evento_t *ev);
 
 //evento AVISA
-void avisa(int t, struct base b);
+void avisa(struct mundo *w, struct evento_t *ev);
 
 //evento ENTRA
-void entra(int t, struct heroi h, struct base b);
+void entra(struct mundo *w, struct evento_t *ev);
 
 //evento SAI
-void sai(int t, struct heroi h, struct base b);
+void sai(struct mundo *w, struct evento_t *ev);
 
 //evento VIAJA
-void viaja(int t, struct heroi h, struct base b);
+void viaja(struct mundo *w, struct evento_t *ev);
 
 //evento MORRE
-void morre(int t, struct heroi h, struct base b);
+void morre(struct mundo *w, struct evento_t *ev);
 
 //evento MISSÃO
-void missao(int t, struct missao m, struct mundo w);
+void missao(struct mundo *w, struct evento_t *ev);
 
 //evento FIM
-void fim(int t);
+void fim(struct mundo *w, struct evento_t *ev);
 
 #endif
