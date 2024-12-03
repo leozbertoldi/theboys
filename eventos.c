@@ -7,7 +7,7 @@
 
 //EVENTOS INICIAIS
 //=======================================================================================
-void base_aleatoria(struct mundo w)
+void base_aleatoria(struct mundo *w)
 {
   int i, j, base, tempo;
   j = 0;
@@ -22,7 +22,7 @@ void base_aleatoria(struct mundo w)
   return;
 }
 
-void agenda_missao(struct mundo w)
+void agenda_missao(struct mundo *w)
 {
   int i, tempo;
 
@@ -38,7 +38,7 @@ void agenda_missao(struct mundo w)
 
 
 //evento CHEGA
-void chega(int t, struct heroi h, struct base b)
+void chega(int t, struct heroi *h, struct base *b)
 {
   bool espera;
 
@@ -66,7 +66,7 @@ void chega(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento ESPERA
-void espera(int t, struct heroi h, struct base b)
+void espera(int t, struct heroi *h, struct base*b)
 {
   
   lista_insere(b.espera, h, -1);
@@ -81,7 +81,7 @@ void espera(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento DESISTE
-void desiste(int t, struct heroi h, struct base b)
+void desiste(int t, struct heroi *h, struct base *b)
 {
   int D;
 
@@ -97,7 +97,7 @@ void desiste(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento AVISA
-void avisa(int t, struct base b)
+void avisa(int t, struct base *b)
 {
   struct heroi aux;
 
@@ -117,7 +117,7 @@ void avisa(int t, struct base b)
 //----------------------------------------
 
 //evento ENTRA
-void entra(int t, struct heroi h, struct base b)
+void entra(int t, struct heroi *h, struct base *b)
 {
   int TPB;
 
@@ -133,7 +133,7 @@ void entra(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento SAI
-void sai(int t, struct heroi h, struct base b)
+void sai(int t, struct heroi *h, struct base *b)
 {
   int D;
   
@@ -152,7 +152,7 @@ void sai(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento VIAJA
-void viaja(int t, struct heroi h, struct base d)
+void viaja(int t, struct heroi *h, struct base *d)
 {
   float distancia;
 
@@ -169,7 +169,7 @@ void viaja(int t, struct heroi h, struct base d)
 //----------------------------------------
 
 //evento MORRE
-void morre(int t, struct heroi h, struct base b)
+void morre(int t, struct heroi *h, struct base *b)
 {
   cjto_retira(h, h.ID);
   h.vivo = false;
@@ -184,7 +184,7 @@ void morre(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento MISSÃO
-void missao(int t, struct missao m, struct mundo w)
+void missao(int t, struct missao *m, struct mundo *w)
 {
   int i, tamanho, distancia, menor, risco;
   struct base BMP;

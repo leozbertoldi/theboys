@@ -15,14 +15,26 @@
 // programa principal
 int main ()
 {
-  // iniciar o mundo
-  struct mundo m;
-  
+  struct mundo *w;
+  struct fprio_t *lef;
+
+  w = inicializa_mundo(w);
+  lef = fprio_cria();
+  base_aleatoria(w);
+  agenda_missao(w);
+  lef = evento fim(T_FIM_DO_MUNDO);
+
   srand(0);
 
-  lef = evento fim(T_FIM_DO_MUNDO);
-  // executar o laço de simulação
-  printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA\n", t, heroi, base, presentes, lotacao);
+  for (w.relogio = 0; w.relogio < T_FIM_DO_MUNDO; w.relogio++)
+  {
+    
+  }
+
+  
+
+
+  /*printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA\n", t, heroi, base, presentes, lotacao);
   printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE\n", t, heroi, base, presentes, lotacao);
 
   printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", t, heroi, base, espera);
@@ -59,7 +71,18 @@ int main ()
   cjto_imprime(habilidades dos herois);
   printf("\n");
 
-  
+  printf("EVENTOS TRATADOS: %d\n", eventos);
+  printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ");
+  printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ");
+  cjto_imprime(habilidades dos herois);
+  printf("\n");
+  printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", base, lotacao, maximodeheroisnaespera, missoes);
+  printf("MISSOES CUMRPIDAS: %d/%d (%.1f%%)\n", cumpridas, geradas, porcentagem);
+  printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min_tentativas, max_tentativas, media);
+  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/
+
+
+
   // destruir o mundo
 
   return (0) ;
