@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 #include "entidades.h"
 
 struct mundo *inicializa_mundo(struct mundo *m)  

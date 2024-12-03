@@ -3,11 +3,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 #include "lista.h"
 #include "fprio.h"
 #include "conjunto.h"
 #include "entidades.h"
 #include "eventos.h"
+#include "auxiliares.h"
 
 #define T_INICIO 0
 #define T_FIM_DO_MUNDO 525600

@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 #include "eventos.h"
 
 //evento CHEGA
@@ -121,7 +123,7 @@ void viaja(int t, struct heroi h, struct base d)
 {
   float distancia;
 
-  distancia = distancia_cartesiana(h, d);
+  distancia = distancia_cartesiana(h.base_heroi->local, d.local);
   duracao = distancia / h.velocidade;
 
   proximo da lef = chega(agora + duracao, h, d);
@@ -140,6 +142,8 @@ void morre(int t, struct heroi h, struct base b)
   h.vivo = false;
 
   proximo da lef = avisa(agora, b);
+
+  return;
 }
 
 //--------------------------------------- 
@@ -147,8 +151,21 @@ void morre(int t, struct heroi h, struct base b)
 //----------------------------------------
 
 //evento MISSÃO
-void missao(int t, struct missao m)
+void missao(int t, struct missao m, struct mundo w)
 {
+  int i, tamanho;
+  int distancias[w.Nbases];
+
+  for (i = 0; i < w.Nbases; i++)
+  {
+    //a trabalhar: conferir se a base tem as habilidades certas
+    if cjto_inter
+      distancias[i] = distancia_cartesiana(m.local, w.bases[i]);
+      tamanho++;
+  }
+  
+  heap_sort(distancias, tamanho);
+    
 }
 
 //--------------------------------------- 

@@ -15,6 +15,7 @@ struct heroi
   int velocidade;
   int experiencia;
   struct base *base_heroi;
+  bool vivo;
 };
 
 struct base
@@ -36,13 +37,13 @@ struct missao
 
 struct mundo
 {
-  int nherois;
+  int Nherois;
   struct heroi herois[];
-  int nbases;
+  int Nbases;
   struct base bases[];
-  int nmissoes;
+  int Nmissoes;
   struct missao missoes[];
-  int nhabilidades;
+  int Nhabilidades;
   int tamanho;
   int relogio;
 };

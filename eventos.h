@@ -26,7 +26,7 @@ void viaja(int t, struct heroi h, struct base b);
 void morre(int t, struct heroi h, struct base b);
 
 //evento MISSÃO
-void missao(int t, struct missao m);
+void missao(int t, struct missao m, struct mundo w);
 
 //evento FIM
 void fim(int t);
