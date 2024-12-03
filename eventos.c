@@ -16,8 +16,19 @@ void base_aleatoria(struct mundo *w)
   {
     base = rand() % N_BASES;
     tempo = rand() % 4321;
-    proximo lef = chega(tempo, w.herois[i], w.bases[base]);
+    proximo lef = chega(tempo, w->herois[i], w->bases[base]);
   }
+//dica maziero para insrir evento
+    struct evento_t *ev;
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return erro;
+    ev->tipo: CHEGA;
+    ev->tempo: aleat(0,60*24*3);
+    ev->dado1 = x;
+    ev->dado2 = aleat;
+
+    fprio_insere(lef, ev, ev->tipo, ev->tempo)
 
   return;
 }
@@ -31,6 +42,7 @@ void agenda_missao(struct mundo *w)
     tempo = rand() % T_FIM_DO_MUNDO;
     proximo lef = missao(tempo, w.missoes[i]);
   }
+
 
   return;
 }
@@ -188,17 +200,17 @@ void missao(int t, struct missao *m, struct mundo *w)
 {
   int i, tamanho, distancia, menor, risco;
   struct base BMP;
-  menor = w.tamanho;
+  menor = w->tamanho;
 
-  for (i = 0; i < w.Nbases; i++)
+  for (i = 0; i < w->Nbases; i++)
   {
     //a trabalhar: conferir se a base tem as habilidades certas
     if cjto_inter
     {
-      distancia = distancia_cartesiana(m.local, w.bases[i]);
+      distancia = distancia_cartesiana(m.local, w->bases[i]);
       if (distancia < menor)
         menor = distancia;
-        BMP = w.bases[i];
+        BMP = w->bases[i];
     }    
   }
 
@@ -231,7 +243,7 @@ void missao(int t, struct missao *m, struct mundo *w)
 //----------------------------------------
 
 //evento FIM
-void fim(int t)
+void fim(int t) //só prints
 {
 }
 

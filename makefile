@@ -8,20 +8,23 @@ MAIN    = theboys
 ENTREGA = $(MAIN)
 
 # lista de arquivos de cabeçalho (a completar)
-HDR = fila.h fprio.h conjunto.h eventos.h entidades.h auxiliares.h
+HDR = lista.h fprio.h conjunto.h eventos.h entidades.h auxiliares.h
 
 # lista de arquivos-objeto (a completar)
 # não inclua conjunto.o, senão ele será removido com "make clean"
-OBJ = fila.o fprio.o theboys.o eventos.o entidades.o auxiliares.o
+OBJ = lista.o fprio.o theboys.o eventos.o entidades.o auxiliares.o
 
 # construir o executável
 $(MAIN): $(MAIN).o $(OBJ) conjunto.o
 
 # construir os arquivos-objeto (a completar)
 $(MAIN).o: $(MAIN).c $(HDR)
+entidades.o: entidades.c entidades.h
+eventos.o: eventos.c eventos.h entidades.h
+auxiliares.o: auxiliares.c auxiliares.h
 
 # construir os TADs
-fila.o:  fila.c fila.h
+lista.o:  lista.c lista.h
 fprio.o: fprio.c fprio.h
 
 # executar

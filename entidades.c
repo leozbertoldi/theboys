@@ -39,14 +39,7 @@ struct heroi *inicializa_heroi(struct heroi *h, int i)
   h.experiencia = 0;
   h.paciencia = rand() % 101; //aleat entre 0 e 100
   h.velocidade = rand() % 4951 + 50;  //aleat entre 50 e 5000
-  h.habilidades = cjto_cria(3);
-  if (!h.habilidades)
-    return NULL;
-  for (j = 0; j < 3; j++)
-  {
-    habilidade = rand() % N_HABILIDADES; 
-    cjto_insere(h.habilidades, habilidade);
-  }
+  h.habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
   h.base_heroi = NULL;
   h.vivo = true;
 
@@ -72,13 +65,7 @@ struct missao *inicializa_missao(struct missao *m, int i)
   m.ID = i;
   m.local->x = rand() % N_TAMANHO_MUNDO;
   m.local->y = rand() % N_TAMANHO_MUNDO;
-  tamanho = rand() % 5 + 6; //aleat entre 6 e 10;
-  m.habilidades = cjto_cria(tamanho);
-  for (j = 0; j < tamanho; j++)
-  {
-    habilidade = rand() % N_HABILIDADES;
-    cjto_insere(m.habilidades, habilidade);
-  }
+  m.habilidades = cjto_aleat(aleat(6,10),N_HABILIDADES);
   m.perigo = rand() % 101;
   m.cumprida = false;
   m.tentativas = 0;

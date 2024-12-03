@@ -16,8 +16,7 @@
 int main ()
 {
   struct mundo *w;
-  struct fprio_t *lef;
-
+  w = malloc(sizeof(struct mundo));
   w = inicializa_mundo(w);
   lef = fprio_cria();
   base_aleatoria(w);
@@ -25,9 +24,29 @@ int main ()
   lef = evento fim(T_FIM_DO_MUNDO);
 
   srand(0);
-
-  for (w.relogio = 0; w.relogio < T_FIM_DO_MUNDO; w.relogio++)
+  
+  while (!fim)
   {
+    ev = fprio_retira(lef, &tipo, &tempo);
+    clock = ev->tempo;
+    
+    switch(ev->tipo)
+    {
+      case EV_CHEGA chega(*w, *ev);
+      break;
+
+      case EV_ESPERA
+      case EV_DECIDE
+      case EV_AVISA
+      case EV_ENTRA
+      case EV_SAI
+      case EV_VIAJA
+      case EV_MORRE
+      case EV_CHEGA 
+      case EV_CHEGA 
+
+      free(ev);
+    }
     
   }
 
@@ -79,7 +98,7 @@ int main ()
   printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", base, lotacao, maximodeheroisnaespera, missoes);
   printf("MISSOES CUMRPIDAS: %d/%d (%.1f%%)\n", cumpridas, geradas, porcentagem);
   printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min_tentativas, max_tentativas, media);
-  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/
+  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/ //div 1.0
 
 
 

@@ -9,6 +9,17 @@
 #define N_BASES  (N_HEROIS/5)
 #define N_MISSOES  (T_FIM_DO_MUNDO/100)
 
+#define EV_CHEGA 1
+#define EV_ESPERA 2
+#define EV_DECIDE 3
+#define EV_AVISA 4
+#define EV_ENTRA 5
+#define EV_SAI 6
+#define EV_VIAJA 7
+#define EV_MORRE 8
+#define EV_MISSAO 9
+#define EV_FIM 10
+
 struct local
 {
   int x;
@@ -56,6 +67,15 @@ struct mundo
   int Nhabilidades;
   struct local tamanho;
   int relogio;
+  struct fprio_t *lef;
+};
+
+struct evento_t
+{
+  int tipo;
+  int tempo;
+  int dado1;
+  int dado2;
 };
 
 struct mundo *inicializa_mundo(struct mundo *m);
