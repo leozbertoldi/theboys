@@ -42,6 +42,7 @@ struct missao
   int perigo;
   struct local *local;
   bool cumprida;
+  int tentativas;
 };
 
 struct mundo
@@ -53,7 +54,7 @@ struct mundo
   int Nmissoes;
   struct missao missoes[];
   int Nhabilidades;
-  int tamanho;
+  struct local tamanho;
   int relogio;
 };
 
@@ -63,5 +64,6 @@ struct heroi *inicializa_heroi(struct heroi *h, int i);
 
 struct base *inicializa_base(struct base *b, int i);  
 
+struct missao *inicializa_missao(struct missao *m, int i);
 
 #endif

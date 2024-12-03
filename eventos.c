@@ -5,6 +5,38 @@
 #include "eventos.h"
 #include "entidades.h"
 
+//EVENTOS INICIAIS
+//=======================================================================================
+void base_aleatoria(struct mundo w)
+{
+  int i, j, base, tempo;
+  j = 0;
+
+  for (i = 0; i < N_HEROIS; i++)
+  {
+    base = rand() % N_BASES;
+    tempo = rand() % 4321;
+    proximo lef = chega(tempo, w.herois[i], w.bases[base]);
+  }
+
+  return;
+}
+
+void agenda_missao(struct mundo w)
+{
+  int i, tempo;
+
+  for (i = 0; i < N_MISSOES; i++)
+  {
+    tempo = rand() % T_FIM_DO_MUNDO;
+    proximo lef = missao(tempo, w.missoes[i]);
+  }
+
+  return;
+}
+//=======================================================================================
+
+
 //evento CHEGA
 void chega(int t, struct heroi h, struct base b)
 {
@@ -13,7 +45,7 @@ void chega(int t, struct heroi h, struct base b)
   if (!h || !b)
     return -1;
 
-  h.base_heroi= b;
+  h.base_heroi = b;
 
   // confere se o número de presentes é maior q a capacidade
   if (b.lotacao < cjto_card(b.presentes))
@@ -186,7 +218,10 @@ void missao(int t, struct missao m, struct mundo w)
     }
   }
   else 
+  {
    proximo da lef = missao(t + 24*60, m);
+   m.tentativas++;
+  }
 
   return;
 }
