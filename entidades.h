@@ -33,7 +33,7 @@ struct heroi
   int paciencia;
   int velocidade;
   int experiencia;
-  struct base *base_heroi;
+  int ID_base;
   bool vivo;
 };
 
@@ -58,16 +58,12 @@ struct missao
 
 struct mundo
 {
-  int Nherois;
   struct heroi herois[];
-  int Nbases;
   struct base bases[];
-  int Nmissoes;
   struct missao missoes[];
-  int Nhabilidades;
   struct local tamanho;
-  int relogio;
   struct fprio_t *lef;
+  int clock;
 };
 
 struct evento_t

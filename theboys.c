@@ -17,20 +17,33 @@ int main ()
 {
   struct mundo *w;
   struct evento_t *ev;
+  bool fim = false;
+  int tipo, prioridade;
 
   w = malloc(sizeof(struct mundo));
   w = inicializa_mundo(w);
  
   base_aleatoria(w);
   agenda_missao(w);
-  lef = evento fim(T_FIM_DO_MUNDO);
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+  ev->tipo = EV_FIM;
+  ev->tempo = T_FIM_DO_MUNDO;
+  ev->dado1 = 0;
+  ev->dado2 = 0;
+  fprio_insere(w->lef, ev, EV_FIM, T_FIM_DO_MUNDO);
 
   srand(0);
   
   while (!fim)
   {
-    ev = fprio_retira(lef, &tipo, &tempo);
-    clock = ev->tempo;
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return -1;
+    
+    ev = fprio_retira(w->lef, &tipo, &tempo);
+    w->clock = ev->tempo;
     
     switch(ev->tipo)
     {
@@ -61,7 +74,9 @@ int main ()
       case EV_MISSAO: missao(w, ev);
       break;
 
+      //possível leak
       case EV_FIM: fim(w, ev);
+      fim = true;
       break;
 
       free(ev);
@@ -108,17 +123,6 @@ int main ()
   printf("%6d: MISSAO %d UNIAO HAB BASE %d: ", t, missao, base);
   cjto_imprime(habilidades dos herois);
   printf("\n");
-
-  printf("EVENTOS TRATADOS: %d\n", eventos);
-  printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ");
-  printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ");
-  cjto_imprime(habilidades dos herois);
-  printf("\n");
-  printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", base, lotacao, maximodeheroisnaespera, missoes);
-  printf("MISSOES CUMRPIDAS: %d/%d (%.1f%%)\n", cumpridas, geradas, porcentagem);
-  printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min_tentativas, max_tentativas, media);
-  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/ //div 1.0
-
 
 
   // destruir o mundo

@@ -8,70 +8,100 @@
 
 //EVENTOS INICIAIS
 //=======================================================================================
-void base_aleatoria(struct mundo *w)
+int base_aleatoria(struct mundo *w)
 {
-  int i, j, base, tempo;
-  j = 0;
+  int i, base, tempo;
+  struct evento_t *ev;
+
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+
+  ev->tipo = EV_CHEGA;
+  ev->dado2 = 0;
 
   for (i = 0; i < N_HEROIS; i++)
   {
     base = aleat(0,N_BASES-1);
     tempo = aleat(0,4320);
-    proximo lef = chega(tempo, w->herois[i], w->bases[base]);
+    ev->tempo = tempo;
+    ev->dado1 = base;
+
+    fprio_insere(w->lef, ev, EV_CHEGA, tempo);
   }
-//dica maziero para insrir evento
-    struct evento_t *ev;
-    ev = malloc(sizeof(struct evento_t));
-    if (!ev)
-      return erro;
-    ev->tipo: CHEGA;
-    ev->tempo: aleat(0,60*24*3);
-    ev->dado1 = x;
-    ev->dado2 = aleat;
 
-    fprio_insere(lef, ev, ev->tipo, ev->tempo)
-
-  return;
+  return 0;
 }
 
-void agenda_missao(struct mundo *w)
+int agenda_missao(struct mundo *w)
 {
   int i, tempo;
+  struct evento_t *ev;
+
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+
+  ev->tipo = EV_MISSAO;
+  ev->dado1 = 0;
+  ev->dado2 = 0;
 
   for (i = 0; i < N_MISSOES; i++)
   {
     tempo = aleat(0,T_FIM_DO_MUNDO-1);
-    proximo lef = missao(tempo, w.missoes[i]);
+    ev->tempo = tempo;
+    fprio_insere(w->lef, ev, EV_MISSAO, tempo); 
   }
 
-
-  return;
+  return 0;
 }
 //=======================================================================================
 
 
 //evento CHEGA
-void chega(struct mundo *w, struct evento_t *ev)
+int chega(struct mundo *w, struct evento_t *ev)
 {
-  bool espera;
+  int i;
+  bool espera, vagas, espera_vazia;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  if (!h || !b)
+  if (!w || !ev)
     return -1;
 
-  h.base_heroi = b;
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
 
-  // confere se o número de presentes é maior q a capacidade
-  if (b.lotacao < cjto_card(b.presentes))
-    espera = ( h.paciencia > 10*fprio_tamanho(b.espera) );
-  else 
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  heroi->ID_base = ev->dado1;
+  
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
+
+  vagas = (base->lotacao > cjto_card(base->presentes));
+  espera_vazia = (lista_tamanho(base->espera) == 0);
+  if (vagas && espera_vazia)
     espera = true;
+  else
+    espera = ((heroi->paciencia) > (10 * lista_tamanho(base->espera)));
 
   if (espera)
-    proximo da lef = evento espera
-  else
-    proximo da lef = evento desiste
+    ev->tipo = EV_ESPERA;
+  else 
+    ev->tipo = EV_DESISTE;
 
-  return;
+  ev->tempo = w->clock;
+  ev->dado1 = heroi->ID;
+  ev->dado2 = base->ID;
+  fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
+
+  return 0;
 }
 
 //--------------------------------------- 
@@ -79,14 +109,37 @@ void chega(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento ESPERA
-void espera(struct mundo *w, struct evento_t *ev)
+int espera(struct mundo *w, struct evento_t *ev)
 {
+  int i;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
+
+  if (!w || !ev)
+    return -1;
+
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
+
+  lista_insere(base->espera, heroi->ID, -1);
   
-  lista_insere(b.espera, h, -1);
+  ev->tipo = EV_AVISA;
+  ev->tempo = w->clock;
+  ev->dado1 = base->ID;
+  ev->dado2 = 0;
+  fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
-  proximo da lef = evento avisa
-
-  return;
+  return 0;
 }
 
 //--------------------------------------- 
@@ -94,15 +147,32 @@ void espera(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento DESISTE
-void desiste(struct mundo *w, struct evento_t *ev)
+int desiste(struct mundo *w, struct evento_t *ev)
 {
-  int D;
+  int i, D;
+  struct evento_t *ev;
+  struct heroi *heroi;
+
+  if (!w || !ev)
+    return -1;
+
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
 
   D = aleat(0,N_BASES-1);
 
-  proximo da lef = evento viaja(agora, h, D);
+  ev->tipo = EV_VIAJA;
+  ev->tempo = w->clock;
+  ev->dado1 = heroi->ID;
+  ev->dado2 = D;
+  fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
-  return;
+  return 0;
 }
 
 //--------------------------------------- 
@@ -110,19 +180,47 @@ void desiste(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento AVISA
-void avisa(struct mundo *w, struct evento_t *ev)
+int avisa(struct mundo *w, struct evento_t *ev)
 {
-  struct heroi aux;
+  int i;
+  bool vagas, espera;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  while ( (cjto_card(b.presentes) < b.lotacao) && (lista_tamanho(b.espera) > 0) )
+  if (!w || !ev)
+    return -1;
+
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
+  
+  vagas = (base->lotacao >= cjto_card(base->presentes));
+  espera = (lista_tamanho(base->espera) > 0);
+  while (vagas && espera)
   {
-    aux = b.espera->prim;
-    lista_retira(b.presentes, aux->valor, 0);
-    cjto_insere(b.presentes, aux->valor);
-    proximo da lef = evento entra(agora, aux, b);
+    lista_retira(base->espera, heroi->ID, 0);
+    cjto_insere(base->presentes, heroi->ID);
+
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return -1;
+
+    ev->tipo = EV_ENTRA;
+    ev->tempo = w->clock;
+    ev->dado1 = heroi->ID;
+    ev->dado2 = base->ID;
+    fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
+
+    vagas = (base->lotacao >= cjto_card(base->presentes));
+    espera = (lista_tamanho(base->espera) > 0);
   }
 
-  return;
+  return 0;
 }
 
 //--------------------------------------- 
@@ -130,15 +228,27 @@ void avisa(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento ENTRA
-void entra(struct mundo *w, struct evento_t *ev)
+int entra(struct mundo *w, struct evento_t *ev)
 {
-  int TPB;
+  int i;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  TPB = 15 + h.paciencia * aleat(0,20);
+  if (!w || !ev)
+    return -1;
 
-  proximo da lef = evento sai(agora + TPB, h, b);
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
 
-  return;
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
 }
 
 //--------------------------------------- 
@@ -146,18 +256,27 @@ void entra(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento SAI
-void sai(struct mundo *w, struct evento_t *ev)
+int sai(struct mundo *w, struct evento_t *ev)
 {
-  int D;
-  
-  lista_retira(b.presentes, h, lista_consulta(h));
+  int i;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  D = aleat(0,N_BASES-1);
+  if (!w || !ev)
+    return -1;
 
-  proximo da lef = viaja(agora, h, D);
-  proximo da lef = avisa(agora, b);
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
 
-  return;
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
 }
 
 //--------------------------------------- 
@@ -165,16 +284,27 @@ void sai(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento VIAJA
-void viaja(struct mundo *w, struct evento_t *ev)
+int viaja(struct mundo *w, struct evento_t *ev)
 {
-  float distancia;
+  int i;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  distancia = distancia_cartesiana(h.base_heroi->local, d.local);
-  duracao = distancia / h.velocidade;
+  if (!w || !ev)
+    return -1;
 
-  proximo da lef = chega(agora + duracao, h, d);
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
 
-  return;
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
 }
 
 //--------------------------------------- 
@@ -182,14 +312,27 @@ void viaja(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento MORRE
-void morre(struct mundo *w, struct evento_t *ev)
+int morre(struct mundo *w, struct evento_t *ev)
 {
-  cjto_retira(h, h.ID);
-  h.vivo = false;
+  int i;
+  struct evento_t *ev;
+  struct base *base;
+  struct heroi *heroi;
 
-  proximo da lef = avisa(agora, b);
+  if (!w || !ev)
+    return -1;
 
-  return;
+  ev = malloc(sizeof(struct evento_t));
+  if (!ev)
+    return -1;
+
+  for (i = 0; i < N_HEROIS; i++)
+    if (i == w->herois[i]->ID)
+      heroi = w->herois[i];
+
+  for (i = 0; i < N_BASES; i++)
+    if (i == ev->dado1)
+      base = w->bases[i];
 }
 
 //--------------------------------------- 
@@ -197,7 +340,7 @@ void morre(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento MISSÃO
-void missao(struct mundo *w, struct evento_t *ev)
+int missao(struct mundo *w, struct evento_t *ev)
 {
   int i, tamanho, distancia, menor, risco;
   struct base BMP;
