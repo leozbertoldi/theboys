@@ -58,12 +58,12 @@ struct missao
 
 struct mundo
 {
+  int clock;
+  struct fprio_t *lef;
+  struct local tamanho;
   struct heroi herois[];
   struct base bases[];
   struct missao missoes[];
-  struct local tamanho;
-  struct fprio_t *lef;
-  int clock;
 };
 
 struct evento_t

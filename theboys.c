@@ -17,8 +17,8 @@ int main ()
 {
   struct mundo *w;
   struct evento_t *ev;
-  bool fim = false;
-  int tipo, prioridade;
+  bool end = false;
+  int tipo, tempo;
 
   w = malloc(sizeof(struct mundo));
   w = inicializa_mundo(w);
@@ -36,7 +36,7 @@ int main ()
 
   srand(0);
   
-  while (!fim)
+  while (!end)
   {
     ev = malloc(sizeof(struct evento_t));
     if (!ev)
@@ -76,7 +76,7 @@ int main ()
 
       //possível leak
       case EV_FIM: fim(w, ev);
-      fim = true;
+      end = true;
       break;
 
       free(ev);
@@ -122,7 +122,7 @@ int main ()
   printf("\n");
   printf("%6d: MISSAO %d UNIAO HAB BASE %d: ", t, missao, base);
   cjto_imprime(habilidades dos herois);
-  printf("\n");
+  printf("\n");*/
 
 
   // destruir o mundo
