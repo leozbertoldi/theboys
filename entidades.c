@@ -4,6 +4,8 @@
 #include <math.h>
 #include "entidades.h"
 #include "auxiliares.h"
+#include "lista.h"
+#include "fprio.h"
 
 struct mundo *inicializa_mundo(struct mundo *w)  
 {

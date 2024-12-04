@@ -5,6 +5,8 @@
 #include "eventos.h"
 #include "entidades.h"
 #include "auxiliares.h"
+#include "lista.h"
+#include "fprio.h"
 
 //EVENTOS INICIAIS
 //=======================================================================================
@@ -92,9 +94,15 @@ int chega(struct mundo *w, struct evento_t *ev)
     espera = ((heroi->paciencia) > (10 * lista_tamanho(base->espera)));
 
   if (espera)
+  {
     ev->tipo = EV_ESPERA;
+    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA\n", w->clock, ev->dado1, ev->dado2, cjto_card(base->presentes), base->lotacao);
+  }
   else 
+  {
     ev->tipo = EV_DESISTE;
+    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE\n", t, heroi, base, presentes, lotacao);
+  }
 
   ev->tempo = w->clock;
   ev->dado1 = heroi->ID;
@@ -404,7 +412,7 @@ int missao(struct mundo *w, struct evento_t *ev)
   struct evento_t *ev, *ev2;
   struct missao *missao;
   struct base *BMP;
-  struct cjto_t uniao, intersec;
+  struct cjto_t uniao;
   int distancia_bases[N_BASES];
 
   if (!w || !ev)
