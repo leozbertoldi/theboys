@@ -36,13 +36,13 @@ struct heroi *inicializa_heroi(struct heroi *h, int i)
   if (!h)
     return NULL;
 
-  h.ID = i;
-  h.experiencia = 0;
-  h.paciencia = aleat(0,100); 
-  h.velocidade = aleat(50,5000);  
-  h.habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
-  h.base_heroi = NULL;
-  h.vivo = true;
+  h->ID = i;
+  h->experiencia = 0;
+  h->paciencia = aleat(0,100); 
+  h->velocidade = aleat(50,5000);  
+  h->habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
+  h->base_heroi = NULL;
+  h->vivo = true;
 
   return h;
 }
@@ -57,7 +57,7 @@ struct base *inicializa_base(struct base *b, int i)
   b->local.x = aleat(0,N_TAMANHO_MUNDO-1);
   b->local.y = aleat(0,N_TAMANHO_MUNDO-1);
   b->lotacao = aleat(3,10); 
-  b->presentes = cjto_cria(b.lotacao);
+  b->presentes = cjto_cria(b->lotacao);
   b->espera = lista_cria();
 
   return b;

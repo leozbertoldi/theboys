@@ -61,9 +61,9 @@ struct mundo
   int clock;
   struct fprio_t *lef;
   struct local tamanho;
-  struct heroi herois[];
-  struct base bases[];
-  struct missao missoes[];
+  struct heroi herois[N_HEROIS];
+  struct base bases[N_BASES];
+  struct missao missoes[N_MISSOES];
 };
 
 struct evento_t
