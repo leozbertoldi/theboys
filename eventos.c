@@ -414,6 +414,11 @@ int missao(struct mundo *w, struct evento_t *evento)
   cjto_imprime(missao->habilidades);
   printf("\n");
 
+  // Ordenar distancias em paralelo aos indices
+  // (na tentativa 1)
+  // ver uniao
+  // ver contem
+
   uniao = cjto_cria(N_HABILIDADES);
 
   for (i = 0; i < N_BASES; i++)
@@ -447,17 +452,18 @@ int missao(struct mundo *w, struct evento_t *evento)
 
   BMP_ID = -1;
   i = 0;
-  while (BMP_ID == -1 && i != N_BASES) 
+  while ( i != N_BASES && BMP_ID == -1)
   {
-    BMP_ID = distancia_bases[i];
+    if (distancia_bases[i] != -1)
+      BMP_ID = i;
     i++;
   }
 
-  if (BMP_ID != -1)
+  if (BMP_ID != -1 )
   {
     missao->cumprida = true;
 
-    BMP = w->bases[BMP->ID];
+    BMP = w->bases[BMP_ID];
 
     BMP.missoes_participadas++;
 
