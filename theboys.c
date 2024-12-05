@@ -44,6 +44,7 @@ int main ()
     
     ev = fprio_retira(w->lef, &tipo, &tempo);
     w->clock = ev->tempo;
+    w->eventos_tratados++;
     
     switch(ev->tipo)
     {

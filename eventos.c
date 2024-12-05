@@ -143,6 +143,9 @@ int espera(struct mundo *w, struct evento_t *ev)
   
   lista_insere(base->espera, heroi->ID, -1);
 
+  if (lista_tamanho(base->espera) > base->max_espera)
+    base->max_espera = lista_tamanho(base->espera);
+
   ev->tipo = EV_AVISA;
   ev->tempo = w->clock;
   ev->dado1 = 0;
@@ -490,6 +493,8 @@ int missao(struct mundo *w, struct evento_t *ev)
       if (i == BMD_ID)
         BMD = w->bases[i];
 
+    BMD->missoes_participadas++;
+
     for (i = 0; i < N_HEROIS; i++)
     {
       if (cjto_pertence(BMP->presentes, w->herois[i]->ID))
@@ -539,15 +544,70 @@ int missao(struct mundo *w, struct evento_t *ev)
 //evento FIM
 void fim(struct mundo *w, struct evento_t *ev) 
 {
-  printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ", );
-  printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ", );
-  cjto_imprime(habilidades dos herois);
-  printf("\n");
-  printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", base, lotacao, maximodeheroisnaespera, missoes);
-  printf("EVENTOS TRATADOS: %d\n", eventos);
-  printf("MISSOES CUMRPIDAS: %d/%d (%.1f%%)\n", cumpridas, geradas, porcentagem);
-  printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min_tentativas, max_tentativas, media);
-  printf("TAXA MORTALIDADE: %.1f%%", mortes porcentagem);*/ //div 1.0
+  int i, j, missoes_cumpridas, min, max, media, total, vivos, mortos;
+  struct heroi *h;
+  struct base *b;
+
+  missoes_cumpridas = 0;
+  min = 0;
+  max = 0;
+  total = 0;
+  media = 0;
+  vivos = 0;
+  mortos = 0;
+
+  for (i = 0; i < N_HEROIS; i++)
+  {
+    h = w->herois[i];
+    if (h->vivo)
+    {
+      printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ", h->ID, h->paciencia, h->velocidade, h->EXP);
+      cjto_imprime(h->habilidades);
+      printf("\n");
+    }
+    else 
+    {
+      printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ", h->ID, h->paciencia, h->velocidade, h->EXP);
+      cjto_imprime(h->habilidades);
+      printf("\n");
+    }
+  }
+
+  for (i = 0; i < N_BASES; i++)
+  {
+    b = w->bases[i];
+    printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", b->ID, b->lotacao, b->max_espera, b->missoes_participadas);
+  }
+  
+  printf("EVENTOS TRATADOS: %d\n", w->eventos_tratados);
+
+  for (i = 0; i < N_MISSOES; i++)
+  {
+    if (w->missoes[i]->cumprida)
+      missoes_cumpridas++;
+  }
+  printf("MISSOES CUMPRIDAS: %d/%d (%.1f%%)\n", missoes_cumpridas, N_MISSOES, missoes_cumpridas/N_MISSOES*100);
+
+  for (i = 0; i < N_MISSOES; i++)
+  {
+    if (w->missoes[i]->tentativas < min)
+      min = w->missoes[i]->tentativas;
+    if (w->missoes[i]->tentativas > max)
+      max = w->missoes[i]->tentativas;
+
+    total = total + w->missoes[i]->tentativas;
+  }
+  media = total/N_BASES;
+  printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min, max, media);
+
+  for (i = 0; i < N_HEROIS; i++)
+  {
+    if (w->herois[i]->vivo)
+      vivos++;
+    else
+      mortos++;
+  }
+  printf("TAXA MORTALIDADE: %.1f%%", vivos/mortos*100);*/ //div 1.0
 }
 
 

@@ -28,6 +28,7 @@ struct mundo *inicializa_mundo(struct mundo *w)
 
   w->lef = fprio_cria();
   w->clock = T_INICIO;
+  w->eventos_tratados = 0;
 
   return w;
 }
@@ -61,6 +62,8 @@ struct base *inicializa_base(struct base *b, int i)
   b->lotacao = aleat(3,10); 
   b->presentes = cjto_cria(b->lotacao);
   b->espera = lista_cria();
+  b->max_espera = 0;
+  b->missoes_participadas = 0;
 
   return b;
 }

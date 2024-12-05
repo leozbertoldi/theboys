@@ -44,6 +44,8 @@ struct base
   struct cjnt_t *presentes;
   struct lista_t *espera;
   struct local *local;  
+  int max_espera;
+  int missoes_participadas;
 };
 
 struct missao
@@ -64,6 +66,7 @@ struct mundo
   struct heroi herois[N_HEROIS];
   struct base bases[N_BASES];
   struct missao missoes[N_MISSOES];
+  int eventos_tratados;
 };
 
 struct evento_t
