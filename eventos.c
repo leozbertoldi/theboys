@@ -61,7 +61,7 @@ int agenda_missao(struct mundo *w)
 
 
 //evento CHEGA
-int chega(struct mundo *w, struct evento_t *ev)
+int chega(struct mundo *w, struct evento_t *evento)
 {
   int i;
   bool espera, vagas, espera_vazia;
@@ -77,14 +77,14 @@ int chega(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
-  heroi->ID_base = ev->dado2;
+  heroi->ID_base = evento->dado2;
   
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
 
   vagas = (base->lotacao > cjto_card(base->presentes));
   espera_vazia = (lista_tamanho(base->espera) == 0);
@@ -96,12 +96,12 @@ int chega(struct mundo *w, struct evento_t *ev)
   if (espera)
   {
     ev->tipo = EV_ESPERA;
-    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA\n", w->clock, ev->dado1, ev->dado2, cjto_card(base->presentes), base->lotacao);
+    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) ESPERA\n", w->clock, evento->dado1, evento->dado2, cjto_card(base->presentes), base->lotacao);
   }
   else 
   {
     ev->tipo = EV_DESISTE;
-    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE\n", w->clock, ev->dado1, ev->dado2, cjto_card(base->presentes), base->lotacao);
+    printf("%6d: CHEGA HEROI %2d BASE %d (%2d/%2d) DESISTE\n", w->clock, evento->dado1, evento->dado2, cjto_card(base->presentes), base->lotacao);
   }
 
   ev->tempo = w->clock;
@@ -117,7 +117,7 @@ int chega(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento ESPERA
-int espera(struct mundo *w, struct evento_t *ev)
+int espera(struct mundo *w, struct evento_t *evento)
 {
   int i;
   struct evento_t *ev;
@@ -132,12 +132,12 @@ int espera(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
 
   printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", w->clock, heroi->ID, base->ID, lista_tamanho(base->espera));
   
@@ -160,7 +160,7 @@ int espera(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento DESISTE
-int desiste(struct mundo *w, struct evento_t *ev)
+int desiste(struct mundo *w, struct evento_t *evento)
 {
   int i, D;
   struct evento_t *ev;
@@ -174,8 +174,8 @@ int desiste(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   D = aleat(0,N_BASES-1);
 
@@ -195,7 +195,7 @@ int desiste(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento AVISA
-int avisa(struct mundo *w, struct evento_t *ev)
+int avisa(struct mundo *w, struct evento_t *evento)
 {
   int i;
   bool vagas, espera;
@@ -207,12 +207,12 @@ int avisa(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
 
   printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA ", w->clock, base->ID, cjto_card(base->presentes), base->lotacao);
   lista_imprime(base->espera);
@@ -248,7 +248,7 @@ int avisa(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento ENTRA
-int entra(struct mundo *w, struct evento_t *ev)
+int entra(struct mundo *w, struct evento_t *evento)
 {
   int i, TPB;
   struct evento_t *ev;
@@ -263,12 +263,12 @@ int entra(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
 
   TPB = 15 + heroi->paciencia * aleat(1,20);
 
@@ -288,7 +288,7 @@ int entra(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento SAI
-int sai(struct mundo *w, struct evento_t *ev)
+int sai(struct mundo *w, struct evento_t *evento)
 {
   int i, D;
   struct evento_t *ev, *ev2;
@@ -299,12 +299,12 @@ int sai(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
   
   cjto_retira(base->presentes, heroi);
   D = aleat(0,N_BASES-1);
@@ -339,7 +339,7 @@ int sai(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento VIAJA
-int viaja(struct mundo *w, struct evento_t *ev)
+int viaja(struct mundo *w, struct evento_t *evento)
 {
   int i, distancia, duracao;
   struct evento_t *ev;
@@ -354,16 +354,16 @@ int viaja(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_HEROIS; i++)
     if (heroi->ID_base == i)
       base_atual = w->bases[i];  
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
   
   distancia = distancia_cartesiana(base->local, base_atual->local);
   duracao = distancia/heroi->velocidade;
@@ -384,7 +384,7 @@ int viaja(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento MORRE
-int morre(struct mundo *w, struct evento_t *ev)
+int morre(struct mundo *w, struct evento_t *evento)
 {
   int i;
   struct evento_t *ev;
@@ -399,12 +399,12 @@ int morre(struct mundo *w, struct evento_t *ev)
     return -1;
 
   for (i = 0; i < N_HEROIS; i++)
-    if (i == ev->dado1)
-      heroi = w->herois[i];
+    if (i == evento->dado1)
+      heroi = &w->herois[i];
 
   for (i = 0; i < N_BASES; i++)
-    if (i == ev->dado2)
-      base = w->bases[i];
+    if (i == evento->dado2)
+      base = &w->bases[i];
 
   cjto_retira(base->presentes, heroi->ID);
   heroi->vivo = false;
@@ -426,7 +426,7 @@ int morre(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento MISSÃO
-int missao(struct mundo *w, struct evento_t *ev)
+int missao(struct mundo *w, struct evento_t *evento)
 {
   int i, j, BMP_ID, risco;
   struct evento_t *ev, *ev2;
@@ -443,8 +443,8 @@ int missao(struct mundo *w, struct evento_t *ev)
     return -1;
   
   for (i = 0; i < N_MISSOES; i++)
-    if (ev->dado1 == i)
-      missao = w->missoes[i];
+    if (evento->dado1 == i)
+      missao = &w->missoes[i];
 
   printf("%6d: MISSAO %d TENT %d HAB REQ: ", w->clock, missao->ID, missao->tentativas);
   cjto_imprime(missao->habilidades);
@@ -542,7 +542,7 @@ int missao(struct mundo *w, struct evento_t *ev)
 //----------------------------------------
 
 //evento FIM
-void fim(struct mundo *w, struct evento_t *ev) 
+void fim(struct mundo *w, struct evento_t *evento) 
 {
   int i, j, missoes_cumpridas, min, max, media, total, vivos, mortos;
   struct heroi *h;
@@ -558,7 +558,7 @@ void fim(struct mundo *w, struct evento_t *ev)
 
   for (i = 0; i < N_HEROIS; i++)
   {
-    h = w->herois[i];
+    h = &w->herois[i];
     if (h->vivo)
     {
       printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ", h->ID, h->paciencia, h->velocidade, h->EXP);
@@ -575,7 +575,7 @@ void fim(struct mundo *w, struct evento_t *ev)
 
   for (i = 0; i < N_BASES; i++)
   {
-    b = w->bases[i];
+    b = &w->bases[i];
     printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", b->ID, b->lotacao, b->max_espera, b->missoes_participadas);
   }
   
