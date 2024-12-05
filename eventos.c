@@ -419,7 +419,7 @@ int missao(struct mundo *w, struct evento_t *evento)
   for (i = 0; i < N_BASES; i++)
   {
     for (j = 0; j < N_HEROIS; j++) 
-      if (cjto_pertence(w->bases[i].presentes, w->herois[j].ID)) //acha se o heroi esta na base
+      if (cjto_pertence(w->bases[i].presentes, w->herois[j].ID) == 1) //acha se o heroi esta na base
       {
         aux = cjto_uniao(uniao, w->herois[j].habilidades);  //une as habilidades do heroi com resto
         cjto_destroi(uniao);
@@ -457,15 +457,13 @@ int missao(struct mundo *w, struct evento_t *evento)
   {
     missao->cumprida = true;
 
-    for (i = 0; i < N_BASES; i++)
-      if (i == BMP_ID)
-        BMP = w->bases[i];
+    BMP = w->bases[BMP->ID];
 
     BMP.missoes_participadas++;
 
     for (i = 0; i < N_HEROIS; i++)
     {
-      if (cjto_pertence(BMP.presentes, w->herois[i].ID))
+      if (cjto_pertence(BMP.presentes, w->herois[i].ID) == 1)
       {
         risco = missao->perigo/(w->herois[i].paciencia + w->herois[i].experiencia + 1.0);
         if (risco > (aleat(0,30)))
@@ -512,8 +510,8 @@ int missao(struct mundo *w, struct evento_t *evento)
 //evento FIM
 void fim(struct mundo *w) 
 {
-  int i, min, max, total, vivos;
-  float media, mortos, missoes_cumpridas;
+  int i, min, max, total, missoes_cumpridas;
+  float media, mortos;
   struct heroi *h;
   struct base *b;
 
@@ -522,7 +520,6 @@ void fim(struct mundo *w)
   max = 0;
   total = 0;
   media = 0;
-  vivos = 0;
   mortos = 0;
 
   for (i = 0; i < N_HEROIS; i++)
@@ -554,8 +551,8 @@ void fim(struct mundo *w)
   {
     if (w->missoes[i].cumprida)
       missoes_cumpridas++;
-  }
-  printf("MISSOES CUMPRIDAS: %f/%d (%.1f%%)\n", missoes_cumpridas, N_MISSOES, missoes_cumpridas/N_MISSOES*100);
+  }                                                                             
+  printf("MISSOES CUMPRIDAS: %d/%d (%.1f%%)\n", missoes_cumpridas, N_MISSOES, (float)missoes_cumpridas/N_MISSOES*100);
 
   for (i = 0; i < N_MISSOES; i++)
   {
@@ -570,13 +567,10 @@ void fim(struct mundo *w)
   printf("TENTATIVAS/MISSAO: MIN %d, MAX %d, MEDIA %.1f\n", min, max, media);
 
   for (i = 0; i < N_HEROIS; i++)
-  {
-    if (w->herois[i].vivo)
-      vivos++;
-    else
+    if (!w->herois[i].vivo)
       mortos++;
-  }
-  printf("TAXA MORTALIDADE: %.1f%%\n", vivos/mortos*100);
+  
+  printf("TAXA MORTALIDADE: %.1f%%\n", mortos/N_HEROIS*100);
 }
 
 
