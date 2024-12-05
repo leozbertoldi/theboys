@@ -8,10 +8,15 @@
 #include "fprio.h"
 #include "conjunto.h"
 
-struct mundo *inicializa_mundo(struct mundo *w)  
+struct mundo *inicializa_mundo()  
 {
   int i;
+  struct mundo *w;
 
+  w = malloc(sizeof(struct mundo));
+  if (!w)
+    return NULL;
+  
   for (i = 0; i < N_HEROIS; i++)
     w->herois[i] = inicializa_heroi(i);
 

@@ -77,7 +77,7 @@ struct evento_t
   int dado2;
 };
 
-struct mundo *inicializa_mundo(struct mundo *m);
+struct mundo *inicializa_mundo();
 
 struct heroi inicializa_heroi(int i);
 

@@ -20,11 +20,12 @@ int main ()
   bool end = false;
   int tipo, tempo;
 
-  w = malloc(sizeof(struct mundo));
-  w = inicializa_mundo(w);
- 
+  w = inicializa_mundo();
+  
   base_aleatoria(w);
+
   agenda_missao(w);
+
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
     return -1;
@@ -43,10 +44,10 @@ int main ()
       return -1;
     
     ev = fprio_retira(w->lef, &tipo, &tempo);
-    w->clock = ev->tempo;
+    w->clock = tempo;
     w->eventos_tratados++;
     
-    switch(ev->tipo)
+    switch(tipo)
     {
       case EV_CHEGA: chega(w, ev);
       break;
