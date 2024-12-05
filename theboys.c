@@ -76,7 +76,7 @@ int main ()
       break;
 
       //possível leak
-      case EV_FIM: fim(w, ev);
+      case EV_FIM: fim(w);
       end = true;
       break;
 

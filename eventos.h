@@ -35,6 +35,6 @@ int morre(struct mundo *w, struct evento_t *evento);
 int missao(struct mundo *w, struct evento_t *evento);
 
 //evento FIM
-void fim(struct mundo *w, struct evento_t *evento);
+void fim(struct mundo *w);
 
 #endif

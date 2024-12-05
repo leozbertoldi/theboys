@@ -29,7 +29,7 @@ struct local
 struct heroi
 {
   int ID;
-  struct cjnt_t *habilidades;
+  struct cjto_t *habilidades;
   int paciencia;
   int velocidade;
   int experiencia;
@@ -41,7 +41,7 @@ struct base
 {
   int ID;
   int lotacao;
-  struct cjnt_t *presentes;
+  struct cjto_t *presentes;
   struct lista_t *espera;
   struct local *local;  
   int max_espera;
@@ -51,7 +51,7 @@ struct base
 struct missao
 {
   int ID;
-  struct cjnt_t *habilidades;
+  struct cjto_t *habilidades;
   int perigo;
   struct local *local;
   bool cumprida;
@@ -79,10 +79,10 @@ struct evento_t
 
 struct mundo *inicializa_mundo(struct mundo *m);
 
-struct heroi *inicializa_heroi(struct heroi *h, int i);
+struct heroi inicializa_heroi(int i);
 
-struct base *inicializa_base(struct base *b, int i);  
+struct base inicializa_base(int i); 
 
-struct missao *inicializa_missao(struct missao *m, int i);
+struct missao inicializa_missao(int i);
 
 #endif

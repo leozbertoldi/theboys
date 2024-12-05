@@ -19,9 +19,9 @@ $(MAIN): $(MAIN).o $(OBJ) conjunto.o
 
 # construir os arquivos-objeto (a completar)
 $(MAIN).o: $(MAIN).c $(HDR)
-entidades.o: entidades.c entidades.h auxiliares.h lista.h fprio.h
-eventos.o: eventos.c eventos.h entidades.h auxiliares.h  lista.h fprio.h
-auxiliares.o: auxiliares.c auxiliares.h
+entidades.o: entidades.c entidades.h auxiliares.h lista.h fprio.h conjunto.h
+eventos.o: eventos.c eventos.h entidades.h auxiliares.h  lista.h fprio.h conjunto.h
+auxiliares.o: auxiliares.c auxiliares.h entidades.h
 
 # construir os TADs
 lista.o:  lista.c lista.h
