@@ -77,7 +77,7 @@ struct missao *inicializa_missao(struct missao *m, int i)
   m->habilidades = cjto_aleat(aleat(6,10),N_HABILIDADES);
   m->perigo = aleat(0,100);
   m->cumprida = false;
-  m->tentativas = 0;
+  m->tentativas = 1;
 
   return m;
 }
