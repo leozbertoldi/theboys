@@ -40,15 +40,14 @@ int agenda_missao(struct mundo *w)
   int i, tempo;
   struct evento_t *ev;
 
-  ev = malloc(sizeof(struct evento_t));
-  if (!ev)
-    return -1;
-
-  ev->tipo = EV_MISSAO;
-  ev->dado2 = 0;
-
   for (i = 0; i < N_MISSOES; i++)
   {
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return -1;
+
+    ev->tipo = EV_MISSAO;
+    ev->dado2 = 0;
     tempo = aleat(0,T_FIM_DO_MUNDO-1);
     ev->tempo = tempo;
     ev->dado1 = i;

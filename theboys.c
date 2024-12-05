@@ -18,7 +18,7 @@ int main ()
   struct mundo *w;
   struct evento_t *ev;
   bool end = false;
-  int tipo, tempo;
+  int tipo, tempo, i;
 
   w = inicializa_mundo();
   
@@ -86,7 +86,24 @@ int main ()
     
   }
 
-  // destruir o mundo
+  for (i = 0; i < N_HEROIS; i++)
+    free(w->herois[i].habilidades);
+
+  for (i = 0; i < N_BASES; i++)
+  {
+    free(w->bases[i].local);
+    free(w->bases[i].espera);
+    free(w->bases[i].presentes);
+  }
+
+  for (i = 0; i < N_MISSOES; i++)
+  {
+    free(w->missoes[i].local);
+    free(w->missoes[i].habilidades);
+  }
+
+  free(w->lef);
+  free(w);
 
   return (0) ;
 }
