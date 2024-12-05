@@ -16,14 +16,13 @@ int base_aleatoria(struct mundo *w)
   int i, base, tempo;
   struct evento_t *ev;
 
-  ev = malloc(sizeof(struct evento_t));
-  if (!ev)
-    return -1;
-
-  ev->tipo = EV_CHEGA;
-
   for (i = 0; i < N_HEROIS; i++)
   {
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return -1;
+
+    ev->tipo = EV_CHEGA;
     base = aleat(0,N_BASES-1);
     tempo = aleat(0,4320);
     ev->tempo = tempo;
