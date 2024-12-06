@@ -61,7 +61,7 @@ struct base inicializa_base(int i)
   b.local->x = aleat(0,N_TAMANHO_MUNDO-1);
   b.local->y = aleat(0,N_TAMANHO_MUNDO-1);
   b.lotacao = aleat(3,10); 
-  b.presentes = cjto_cria(b.lotacao);
+  b.presentes = cjto_cria(N_HEROIS);
   b.espera = lista_cria();
   b.max_espera = 0;
   b.missoes_participadas = 0;
