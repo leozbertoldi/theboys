@@ -63,9 +63,9 @@ struct mundo
   int clock;
   struct fprio_t *lef;
   struct local tamanho;
-  struct heroi herois[N_HEROIS];
-  struct base bases[N_BASES];
-  struct missao missoes[N_MISSOES];
+  struct heroi *herois[N_HEROIS];
+  struct base *bases[N_BASES];
+  struct missao *missoes[N_MISSOES];
   int eventos_tratados;
 };
 
@@ -79,10 +79,10 @@ struct evento_t
 
 struct mundo *inicializa_mundo();
 
-struct heroi inicializa_heroi(int i);
+struct heroi *inicializa_heroi(int i);
 
-struct base inicializa_base(int i); 
+struct base *inicializa_base(int i); 
 
-struct missao inicializa_missao(int i);
+struct missao *inicializa_missao(int i);
 
 #endif

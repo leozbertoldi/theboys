@@ -9,8 +9,8 @@ long aleat (long min, long max);
 
 void troca(int *a, int *b);
 
-void build_heap(int v[], int n, int i);
+void build_heap(int v[], int a[], int n, int i);
 
-void heap_sort(int v[], int n);
+void heap_sort(int v[], int a[], int n);
 
 #endif

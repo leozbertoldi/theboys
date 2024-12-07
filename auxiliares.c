@@ -27,7 +27,7 @@ void troca(int *a, int *b)
     *b = aux;
 }
 
-void build_heap(int v[], int n, int i) 
+void build_heap(int v[], int a[], int n, int i) 
 {
   int max = i; 
   int esquerda = 2 * i + 1; 
@@ -42,21 +42,23 @@ void build_heap(int v[], int n, int i)
   if (max != i) 
   {
     troca(&v[i], &v[max]);
-    build_heap(v, n, max);
+    troca(&a[i], &a[max]);
+    build_heap(v, a, n, max);
   }
 }
 
-void heap_sort(int v[], int n) 
+void heap_sort(int v[], int a[], int n) 
 {
   int i;
 
   for (i = n / 2 - 1; i >= 0; i--)
-    build_heap(v, n, i);
+    build_heap(v, a, n, i);
 
   for (int i = n - 1; i >= 0; i--)
   {
     troca(&v[0], &v[i]);
+    troca(&a[0], &a[i]);
 
-    build_heap(v, i, 0);
+    build_heap(v, a, i, 0);
   }
 }

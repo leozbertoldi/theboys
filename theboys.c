@@ -20,6 +20,8 @@ int main ()
   bool end = false;
   int tipo, tempo, i;
 
+  srand(0);
+
   w = inicializa_mundo();
   
   base_aleatoria(w);
@@ -34,8 +36,6 @@ int main ()
   ev->dado1 = 0;
   ev->dado2 = 0;
   fprio_insere(w->lef, ev, EV_FIM, T_FIM_DO_MUNDO);
-
-  srand(0);
   
   while (!end)
   {
@@ -87,23 +87,28 @@ int main ()
   }
 
   for (i = 0; i < N_HEROIS; i++)
-    free(w->herois[i].habilidades);
+  {
+    free(w->herois[i]->habilidades);
+    free(w->herois[i]);
+  }
 
   for (i = 0; i < N_BASES; i++)
   {
-    free(w->bases[i].local);
-    free(w->bases[i].espera);
-    free(w->bases[i].presentes);
+    free(w->bases[i]->local);
+    free(w->bases[i]->espera);
+    free(w->bases[i]->presentes);
+    free(w->bases[i]);
   }
 
   for (i = 0; i < N_MISSOES; i++)
   {
-    free(w->missoes[i].local);
-    free(w->missoes[i].habilidades);
+    free(w->missoes[i]->local);
+    free(w->missoes[i]->habilidades);
+    free(w->missoes[i]);
   }
 
   free(w->lef);
   free(w);
 
-  return (0) ;
+  return (0);
 }

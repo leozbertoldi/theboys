@@ -36,52 +36,64 @@ struct mundo *inicializa_mundo()
   return w;
 }
 
-struct heroi inicializa_heroi(int i)
+struct heroi *inicializa_heroi(int i)
 {
-  struct heroi h;
+  struct heroi *h;
 
-  h.ID = i;
-  h.experiencia = 0;
-  h.paciencia = aleat(0,100); 
-  h.velocidade = aleat(50,5000);  
-  h.habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
-  h.ID_base = -1;
-  h.vivo = true;
+  h = malloc(sizeof(struct heroi));
+  if (!h)
+    return NULL;   
+
+  h->ID = i;
+  h->experiencia = 0;
+  h->paciencia = aleat(0,100); 
+  h->velocidade = aleat(50,5000);  
+  h->habilidades = cjto_aleat(aleat(1,3),N_HABILIDADES);
+  h->ID_base = -1;
+  h->vivo = true;
 
   return h;
 }
 
-struct base inicializa_base(int i)
+struct base *inicializa_base(int i)
 {
-  struct base b;
+  struct base *b;
 
-  b.local = malloc(sizeof(struct local));
+  b = malloc(sizeof(struct base));
+  if (!b)
+    return NULL;   
+
+  b->local = malloc(sizeof(struct local));
   
-  b.ID = i;
-  b.local->x = aleat(0,N_TAMANHO_MUNDO-1);
-  b.local->y = aleat(0,N_TAMANHO_MUNDO-1);
-  b.lotacao = aleat(3,10); 
-  b.presentes = cjto_cria(N_HEROIS);
-  b.espera = lista_cria();
-  b.max_espera = 0;
-  b.missoes_participadas = 0;
+  b->ID = i;
+  b->local->x = aleat(0,N_TAMANHO_MUNDO-1);
+  b->local->y = aleat(0,N_TAMANHO_MUNDO-1);
+  b->lotacao = aleat(3,10); 
+  b->presentes = cjto_cria(N_HEROIS);
+  b->espera = lista_cria();
+  b->max_espera = 0;
+  b->missoes_participadas = 0;
 
   return b;
 }
 
-struct missao inicializa_missao(int i)
+struct missao *inicializa_missao(int i)
 {
-  struct missao m;
+  struct missao *m;
 
-  m.local = malloc(sizeof(struct local));
+  m = malloc(sizeof(struct missao));
+  if (!m)
+    return NULL;   
 
-  m.ID = i;
-  m.local->x = aleat(0,N_TAMANHO_MUNDO-1);
-  m.local->y = aleat(0,N_TAMANHO_MUNDO-1);
-  m.habilidades = cjto_aleat(aleat(6,10),N_HABILIDADES);
-  m.perigo = aleat(0,100);
-  m.cumprida = false;
-  m.tentativas = 1;
+  m->local = malloc(sizeof(struct local));
+
+  m->ID = i;
+  m->local->x = aleat(0,N_TAMANHO_MUNDO-1);
+  m->local->y = aleat(0,N_TAMANHO_MUNDO-1);
+  m->habilidades = cjto_aleat(aleat(6,10),N_HABILIDADES);
+  m->perigo = aleat(0,100);
+  m->cumprida = false;
+  m->tentativas = 1;
 
   return m;
 }
