@@ -88,26 +88,26 @@ int main ()
 
   for (i = 0; i < N_HEROIS; i++)
   {
-    free(w->herois[i]->habilidades);
+    cjto_destroi(w->herois[i]->habilidades);
     free(w->herois[i]);
   }
 
   for (i = 0; i < N_BASES; i++)
   {
     free(w->bases[i]->local);
-    free(w->bases[i]->espera);
-    free(w->bases[i]->presentes);
+    lista_destroi(w->bases[i]->espera);
+    cjto_destroi(w->bases[i]->presentes);
     free(w->bases[i]);
   }
 
   for (i = 0; i < N_MISSOES; i++)
   {
     free(w->missoes[i]->local);
-    free(w->missoes[i]->habilidades);
+    cjto_destroi(w->missoes[i]->habilidades);
     free(w->missoes[i]);
   }
 
-  free(w->lef);
+  fprio_destroi(w->lef);
   free(w);
 
   return (0);

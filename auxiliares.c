@@ -9,6 +9,9 @@ float distancia_cartesiana(struct local *a, struct local *b)
 {
   int prim, seg;
 
+  if (!a || !b)
+    return -1;
+
   prim = a->x - b->x;
   seg = a->y - b->y;
 

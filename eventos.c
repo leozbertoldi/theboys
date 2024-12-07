@@ -69,6 +69,12 @@ int chega(struct mundo *w, struct evento_t *evento)
   if (!w || !evento)
     return -1;
 
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
+
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
     return -1;
@@ -102,6 +108,8 @@ int chega(struct mundo *w, struct evento_t *evento)
   ev->dado2 = base->ID;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
+  free(evento);
+
   return 0;
 }
 
@@ -118,6 +126,12 @@ int espera(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
+
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
 
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
@@ -140,6 +154,8 @@ int espera(struct mundo *w, struct evento_t *evento)
   ev->dado2 = base->ID;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
+  free(evento);
+
   return 0;
 }
 
@@ -157,6 +173,12 @@ int desiste(struct mundo *w, struct evento_t *evento)
   if (!w || !evento)
     return -1;
 
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
+
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
     return -1;
@@ -172,6 +194,8 @@ int desiste(struct mundo *w, struct evento_t *evento)
   ev->dado1 = heroi->ID;
   ev->dado2 = D;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
+
+  free(evento);
 
   return 0;
 }
@@ -193,9 +217,9 @@ int avisa(struct mundo *w, struct evento_t *evento)
 
   base = w->bases[evento->dado2];
 
-  printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA ", w->clock, base->ID, cjto_card(base->presentes), base->lotacao);
+  printf("%6d: AVISA PORTEIRO BASE %d (%2d/%2d) FILA [ ", w->clock, base->ID, cjto_card(base->presentes), base->lotacao);
   lista_imprime(base->espera);
-  printf("\n");
+  printf(" ]\n");
  
   vagas = (base->lotacao > cjto_card(base->presentes));
   espera = (lista_tamanho(base->espera) > 0);
@@ -219,6 +243,8 @@ int avisa(struct mundo *w, struct evento_t *evento)
     espera = (lista_tamanho(base->espera) > 0);
   }
 
+  free(evento);
+
   return 0;
 }
 
@@ -236,6 +262,12 @@ int entra(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
+
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
 
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
@@ -255,6 +287,8 @@ int entra(struct mundo *w, struct evento_t *evento)
 
   printf("%6d: ENTRA HEROI %2d BASE %d (%2d/%2d) SAI %d\n", w->clock, heroi->ID, base->ID, cjto_card(base->presentes), base->lotacao, ev->tempo);
 
+  free(evento);
+
   return 0;
 }
 
@@ -272,6 +306,12 @@ int sai(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
+  
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
 
   heroi = w->herois[evento->dado1];
 
@@ -300,9 +340,9 @@ int sai(struct mundo *w, struct evento_t *evento)
   ev2->tempo = w->clock;
   ev2->dado1 = 0;
   ev2->dado2 = base->ID;
-  fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
+  fprio_insere(w->lef, ev2, ev2->tipo, ev2->tempo);
 
-  free(ev2);
+  free(evento);
 
   return 0;
 }
@@ -321,6 +361,12 @@ int viaja(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
+
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
 
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
@@ -343,6 +389,8 @@ int viaja(struct mundo *w, struct evento_t *evento)
   ev->dado2 = base->ID;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
+  free(evento);
+
   return 0;
 }
 
@@ -360,6 +408,12 @@ int morre(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
+
+  if (!w->herois[evento->dado1]->vivo)
+  {
+    free(evento);
+    return 0;
+  }
 
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
@@ -383,6 +437,8 @@ int morre(struct mundo *w, struct evento_t *evento)
   ev->dado2 = base->ID;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
+  free(evento);
+
   return 0;
 }
 
@@ -399,6 +455,7 @@ int missao(struct mundo *w, struct evento_t *evento)
   struct base *BMP;
   struct cjto_t *uniao, *aux;
   int distancia_bases[N_BASES], indices_bases[N_BASES];
+  bool impossivel;
 
   if (!w || !evento)
     return -1;
@@ -409,85 +466,85 @@ int missao(struct mundo *w, struct evento_t *evento)
   
   missao = w->missoes[evento->dado1];
 
-  printf("%6d: MISSAO %d TENT %d HAB REQ: ", w->clock, missao->ID, missao->tentativas);
+  printf("%6d: MISSAO %d TENT %d HAB REQ: [ ", w->clock, missao->ID, missao->tentativas);
   cjto_imprime(missao->habilidades);
-  printf("\n");
-
-  uniao = cjto_cria(N_HABILIDADES);
+  printf(" ]\n");
 
   for (i = 0; i < N_BASES; i++)
   {
-    for (j = 0; j < N_HEROIS; j++) 
-      if (cjto_pertence(w->bases[i]->presentes, w->herois[j]->ID) == 1) //acha se o heroi esta na base
-      {
-        aux = cjto_uniao(uniao, w->herois[j]->habilidades);  //une as habilidades do heroi com resto
-        cjto_destroi(uniao);
-        uniao = aux;
-
-        printf("%6d: MISSAO %d HAB HEROI %2d: ", w->clock, missao->ID, w->herois[j]->ID);
-        cjto_imprime(w->herois[j]->habilidades);
-        printf("\n");
-      }
-  
-    distancia_bases[i] = distancia_cartesiana(w->bases[i]->local, missao->local); //distancia entra no vetor
+    distancia_bases[i] = distancia_cartesiana(missao->local, w->bases[i]->local);
     indices_bases[i] = i;
 
-    printf("%6d: MISSAO %d BASE %d DIST %d HEROIS ", w->clock, missao->ID, w->bases[i]->ID, distancia_bases[i]);
+    printf("%6d: MISSAO %d BASE %d DIST %d HEROIS [ ", w->clock, missao->ID, w->bases[i]->ID, distancia_bases[i]);
     cjto_imprime(w->bases[i]->presentes);
-    printf("\n");
-
-    if (!cjto_contem(uniao, missao->habilidades)) //se a uniao das habilidades não contem as da missao
-    {
-      distancia_bases[i] = -1;
-      printf("%6d: MISSAO %d UNIAO HAB BASE %d: INSUFICIENTES\n", w->clock, missao->ID, w->bases[i]->ID);
-    }
-  }
-  
-  heap_sort(indices_bases, distancia_bases, N_BASES);
-
-  BMP_ID = -1;
-  i = 0;
-  while ( i != N_BASES && BMP_ID == -1)
-  {
-    if (distancia_bases[i] != -1)
-      BMP_ID = indices_bases[i];
-    i++;
+    printf(" ]\n");
   }
 
-  if (BMP_ID != -1 )
+  heap_sort(distancia_bases, indices_bases, N_BASES);
+
+  impossivel = true;
+  j = 0;
+  while (impossivel && j < N_BASES)
   {
-    missao->cumprida = true;
-
-    BMP = w->bases[BMP_ID];
-
-    w->bases[BMP_ID]->missoes_participadas++;
+    BMP_ID = indices_bases[j];
+    uniao = cjto_cria(N_HABILIDADES);
 
     for (i = 0; i < N_HEROIS; i++)
     {
-      if (cjto_pertence(BMP->presentes, w->herois[i]->ID) == 1)
+      if (cjto_pertence(w->bases[BMP_ID]->presentes, i))
       {
-        risco = missao->perigo/(w->herois[i]->paciencia + w->herois[i]->experiencia + 1.0);
-        if (risco > (aleat(1,30)))
-        {
-          ev2 = malloc(sizeof(struct evento_t));
-          if (!ev)
-            return -1; 
+        printf("%6d: MISSAO %d HAB HEROI %2d: [ ", w->clock, missao->ID, w->herois[i]->ID);
+        cjto_imprime(w->herois[i]->habilidades);
+        printf(" ]\n");
 
-          ev2->tipo = EV_MORRE;
-          ev2->tempo = w->clock;
-          ev2->dado1 = w->herois[i]->ID;
-          ev2->dado2 = missao->ID;
-          fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
-        }
-        else
-          w->herois[i]->experiencia++;
+        aux = cjto_uniao(uniao, w->herois[i]->habilidades);  //une as habilidades do heroi com resto
+        cjto_destroi(uniao);
+        uniao = aux;
       }
     }
-    printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: ", w->clock, missao->ID, BMP->ID);
+
+    printf("%6d: MISSAO %d UNIAO HAB BASE %d: [ ", w->clock, missao->ID, w->bases[j]->ID);
     cjto_imprime(uniao);
-    printf("\n");
+    printf(" ]\n");
+
+    if (cjto_contem(uniao, missao->habilidades))
+    {
+      BMP = w->bases[BMP_ID];
+      missao->cumprida = true;
+
+      for (i = 0; i < N_HEROIS; i++)
+      {
+        if (cjto_pertence(BMP->presentes, i))
+        {
+          risco = missao->perigo/(w->herois[i]->paciencia+w->herois[i]->experiencia+1.0);
+          if (risco > aleat(0,30))
+          {
+            ev2 = malloc(sizeof(struct evento_t));
+            if (!ev2)
+              return -1; 
+
+            ev2->tipo = EV_MORRE;
+            ev2->tempo = w->clock;
+            ev2->dado1 = w->herois[i]->ID;
+            ev2->dado2 = missao->ID;
+            fprio_insere(w->lef, ev2, ev2->tipo, ev2->tempo);
+          }
+          else
+            w->herois[i]->experiencia++;
+        }
+      }
+      impossivel = false;
+
+      BMP->missoes_participadas++;
+
+      printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", w->clock, missao->ID, BMP->ID);
+      cjto_imprime(uniao);
+      printf(" ]\n");
+    }
+    j++;
   }
-  else 
+
+  if (impossivel)
   {
     printf("%6d: MISSAO %d IMPOSSIVEL\n", w->clock, missao->ID);
 
@@ -498,6 +555,8 @@ int missao(struct mundo *w, struct evento_t *evento)
     ev->dado2 = 0;
     fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
   }
+
+  free(evento);
 
   return 0;
 }  
@@ -526,15 +585,15 @@ void fim(struct mundo *w)
     h = w->herois[i];
     if (h->vivo)
     {
-      printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS ", h->ID, h->paciencia, h->velocidade, h->experiencia);
+      printf("HEROI %2d VIVO PAC %3d VEL %4d EXP %4d HABS [ ", h->ID, h->paciencia, h->velocidade, h->experiencia);
       cjto_imprime(h->habilidades);
-      printf("\n");
+      printf(" ]\n");
     }
     else 
     {
-      printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS ", h->ID, h->paciencia, h->velocidade, h->experiencia);
+      printf("HEROI %2d MORTO PAC %3d VEL %4d EXP %4d HABS [ ", h->ID, h->paciencia, h->velocidade, h->experiencia);
       cjto_imprime(h->habilidades);
-      printf("\n");
+      printf(" ]\n");
     }
   }
 
