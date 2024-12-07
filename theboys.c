@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
 #include "lista.h"
 #include "fprio.h"
 #include "conjunto.h"
@@ -20,7 +21,7 @@ int main ()
   bool end = false;
   int tipo, tempo, i;
 
-  srand(0);
+  srand(time(NULL));
 
   w = inicializa_mundo();
   
