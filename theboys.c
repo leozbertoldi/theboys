@@ -74,13 +74,10 @@ int main ()
       case EV_MISSAO: missao(w, ev);
       break;
 
-      //possível leak
       case EV_FIM: fim(w, ev);
       end = true;
       break;
-      
     }
-    
   }
 
   for (i = 0; i < N_HEROIS; i++)
