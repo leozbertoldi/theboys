@@ -21,7 +21,7 @@ int main ()
   bool end = false;
   int tipo, tempo, i;
 
-  srand(time(NULL));
+  srand(0);
 
   w = inicializa_mundo();
   
@@ -29,6 +29,7 @@ int main ()
 
   agenda_missao(w);
 
+  // agenda o evento fim
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
     return -1;
@@ -40,10 +41,6 @@ int main ()
   
   while (!end)
   {
-    ev = malloc(sizeof(struct evento_t));
-    if (!ev)
-      return -1;
-    
     ev = fprio_retira(w->lef, &tipo, &tempo);
     w->clock = tempo;
     w->eventos_tratados++;
@@ -78,11 +75,10 @@ int main ()
       break;
 
       //possível leak
-      case EV_FIM: fim(w);
+      case EV_FIM: fim(w, ev);
       end = true;
       break;
-
-      free(ev);
+      
     }
     
   }

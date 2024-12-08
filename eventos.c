@@ -11,6 +11,8 @@
 
 //EVENTOS INICIAIS
 //=======================================================================================
+
+// escolhe base e tempo de chegada aleatório para cada herói
 int base_aleatoria(struct mundo *w)
 {
   int i, base, tempo;
@@ -34,6 +36,8 @@ int base_aleatoria(struct mundo *w)
   return 0;
 }
 
+
+// agenda as missões durante a simulação
 int agenda_missao(struct mundo *w)
 {
   int i, tempo;
@@ -85,6 +89,7 @@ int chega(struct mundo *w, struct evento_t *evento)
 
   heroi->ID_base = evento->dado2;
 
+  //analisa as vagas da base e a lista de espera
   vagas = (base->lotacao > cjto_card(base->presentes));
   espera_vazia = (lista_tamanho(base->espera) == 0);
   if (vagas && espera_vazia)
@@ -143,8 +148,11 @@ int espera(struct mundo *w, struct evento_t *evento)
 
   printf("%6d: ESPERA HEROI %2d BASE %d (%2d)\n", w->clock, heroi->ID, base->ID, lista_tamanho(base->espera));
   
+  //insere heroi na lista de espera
   lista_insere(base->espera, heroi->ID, -1);
 
+
+  //para calcular num max de herois na lista de espera
   if (lista_tamanho(base->espera) > base->max_espera)
     base->max_espera = lista_tamanho(base->espera);
 
@@ -221,8 +229,10 @@ int avisa(struct mundo *w, struct evento_t *evento)
   lista_imprime(base->espera);
   printf(" ]\n");
  
+  //analisa vagas da base e lista de espera
   vagas = (base->lotacao > cjto_card(base->presentes));
   espera = (lista_tamanho(base->espera) > 0);
+  //enquanto existir vaga na base e existir heroi na espera
   while (vagas && espera)
   {
     lista_retira(base->espera, &heroi.ID, 0);
@@ -238,7 +248,8 @@ int avisa(struct mundo *w, struct evento_t *evento)
     ev->dado1 = heroi.ID;
     ev->dado2 = base->ID;
     fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
-
+ 
+    //atualiza o booleano de vagas e lista de espera com os novos valores adicionados/retirados
     vagas = (base->lotacao > cjto_card(base->presentes));
     espera = (lista_tamanho(base->espera) > 0);
   }
@@ -277,6 +288,7 @@ int entra(struct mundo *w, struct evento_t *evento)
 
   base = w->bases[evento->dado2];
 
+  //TPB = tempo de permanência na base
   TPB = 15 + heroi->paciencia * aleat(1,20);
 
   ev->tipo = EV_SAI;
@@ -317,11 +329,13 @@ int sai(struct mundo *w, struct evento_t *evento)
 
   base = w->bases[evento->dado2];
   
+  //retira heroi dos presentes da base
   cjto_retira(base->presentes, heroi->ID);
   D = aleat(0,N_BASES-1);
 
   printf("%6d: SAI HEROI %2d BASE %d (%2d/%2d)\n", w->clock, heroi->ID, base->ID, cjto_card(base->presentes), base->lotacao);
   
+  //agenda o evento viagem do herói
   ev = malloc(sizeof(struct evento_t));
   if (!ev)
     return -1;
@@ -332,6 +346,7 @@ int sai(struct mundo *w, struct evento_t *evento)
   ev->dado2 = D;
   fprio_insere(w->lef, ev, ev->tipo, ev->tempo);
 
+  //agenda o evento avisa ao porteiro
   ev2 = malloc(sizeof(struct evento_t));
   if (!ev2)
     return -1;
@@ -378,6 +393,7 @@ int viaja(struct mundo *w, struct evento_t *evento)
 
   base_atual = w->bases[heroi->ID_base];  
   
+  //calcula distancia entre base destino e base atual
   distancia = distancia_cartesiana(base->local, base_atual->local);
   duracao = distancia/heroi->velocidade;
 
@@ -425,6 +441,7 @@ int morre(struct mundo *w, struct evento_t *evento)
 
   missao = w->missoes[evento->dado2];
 
+  //retira heroi da base presente
   cjto_retira(base->presentes, heroi->ID);
   heroi->vivo = false;
   heroi->ID_base = -1;
@@ -459,10 +476,6 @@ int missao(struct mundo *w, struct evento_t *evento)
 
   if (!w || !evento)
     return -1;
-
-  ev = malloc(sizeof(struct evento_t));
-  if (!ev)
-    return -1;
   
   missao = w->missoes[evento->dado1];
 
@@ -470,6 +483,8 @@ int missao(struct mundo *w, struct evento_t *evento)
   cjto_imprime(missao->habilidades);
   printf(" ]\n");
 
+  //organiza dois vetore, um para as distancias de cada base ao local da missão
+  //e uma com os índices das bases que serão ordenados paralelamente às distancias 
   for (i = 0; i < N_BASES; i++)
   {
     distancia_bases[i] = distancia_cartesiana(missao->local, w->bases[i]->local);
@@ -482,6 +497,7 @@ int missao(struct mundo *w, struct evento_t *evento)
 
   heap_sort(distancia_bases, indices_bases, N_BASES);
 
+  //analisa todas as bases em ordem crescente de distancia 
   impossivel = true;
   j = 0;
   while (impossivel && j < N_BASES)
@@ -489,6 +505,7 @@ int missao(struct mundo *w, struct evento_t *evento)
     BMP_ID = indices_bases[j];
     uniao = cjto_cria(N_HABILIDADES);
 
+    //analisa quais herois estao presentes na base
     for (i = 0; i < N_HEROIS; i++)
     {
       if (cjto_pertence(w->bases[BMP_ID]->presentes, i))
@@ -497,7 +514,8 @@ int missao(struct mundo *w, struct evento_t *evento)
         cjto_imprime(w->herois[i]->habilidades);
         printf(" ]\n");
 
-        aux = cjto_uniao(uniao, w->herois[i]->habilidades);  //une as habilidades do heroi com resto
+        //une as habilidades do heroi com todos da base
+        aux = cjto_uniao(uniao, w->herois[i]->habilidades);
         cjto_destroi(uniao);
         uniao = aux;
       }
@@ -507,11 +525,13 @@ int missao(struct mundo *w, struct evento_t *evento)
     cjto_imprime(uniao);
     printf(" ]\n");
 
+    //se as habilidades dos herois presentes suprem as necessidades da missao
     if (cjto_contem(uniao, missao->habilidades))
     {
       BMP = w->bases[BMP_ID];
       missao->cumprida = true;
 
+      //para todo herói pertencente à base
       for (i = 0; i < N_HEROIS; i++)
       {
         if (cjto_pertence(BMP->presentes, i))
@@ -541,12 +561,19 @@ int missao(struct mundo *w, struct evento_t *evento)
       cjto_imprime(uniao);
       printf(" ]\n");
     }
+    //faz as alterações necessárias para o caso de a próxima base do vetor precisar ser analisada
+    cjto_destroi(uniao);
     j++;
   }
 
+  //se a missão não pôde ser cumprida
   if (impossivel)
   {
     printf("%6d: MISSAO %d IMPOSSIVEL\n", w->clock, missao->ID);
+
+    ev = malloc(sizeof(struct evento_t));
+    if (!ev)
+      return -1;
 
     missao->tentativas++;
     ev->tipo = EV_MISSAO;
@@ -566,7 +593,7 @@ int missao(struct mundo *w, struct evento_t *evento)
 //----------------------------------------
 
 //evento FIM
-void fim(struct mundo *w) 
+void fim(struct mundo *w, struct evento_t *evento) 
 {
   int i, min, max, total, missoes_cumpridas;
   float media, mortos;
@@ -580,6 +607,7 @@ void fim(struct mundo *w)
   media = 0;
   mortos = 0;
 
+  //relatório heróis + vivo ou morto
   for (i = 0; i < N_HEROIS; i++)
   {
     h = w->herois[i];
@@ -597,14 +625,17 @@ void fim(struct mundo *w)
     }
   }
 
+  //relatório bases
   for (i = 0; i < N_BASES; i++)
   {
     b = w->bases[i];
     printf("BASE %2d LOT %2d FILA MAX %2d MISSOES %d\n", b->ID, b->lotacao, b->max_espera, b->missoes_participadas);
   }
   
+  //eventos tratados
   printf("EVENTOS TRATADOS: %d\n", w->eventos_tratados);
 
+  //relatório missões
   for (i = 0; i < N_MISSOES; i++)
   {
     if (w->missoes[i]->cumprida)
@@ -629,6 +660,8 @@ void fim(struct mundo *w)
       mortos++;
   
   printf("TAXA MORTALIDADE: %.1f%%\n", mortos/N_HEROIS*100);
+
+  free(evento);
 }
 
 
